@@ -8,39 +8,54 @@ const progress = document.getElementById('progress');
 const progressContainer = document.getElementById('progress-container');
 const title = document.getElementById('title');
 const cover = document.getElementById('cover');
+const currTime = document.querySelector('#currTime');
+const durTime = document.querySelector('#durTime');
 
-//Song titles
-const songs = ['rockabye', 'seeyouagain', 'thankyou'];
+// Song titles
+const songs = ['rockabye', 'thankyou', 'seeyouagain'];
 
-//Keep track of your songs
+// Keep track of song
 let songIndex = 2;
 
-//Initially load song info DOM
-loadsong(songs[songIndex]);
+// Initially load song details into DOM
+loadSong(songs[songIndex]);
 
-//Update song details
-function loadSong(song){
-    title.innertext = song
-    audio.src = `music/${song}.mp3`;
-    cover.src = `images/${song}.jpg`;
+// Update song details
+function loadSong(song) {
+  title.innerText = song;
+  audio.src = `music/${song}.mp3`;
+  cover.src = `images/${song}.jpg`;
 }
 
-//Play Song
-function playSong(){
-    musicContainer.classList.add('play');
-    playBtn.querySelector('i.fas').classList.remove('fa-play');
-    playBtn.querySelector('i.fas').classList.add('fa-pause');
+// Play song
+function playSong() {
+  musicContainer.classList.add('play');
+  playBtn.querySelector('i.fas').classList.remove('fa-play');
+  playBtn.querySelector('i.fas').classList.add('fa-pause');
 
-    audio.play();
+  audio.play();
 }
 
-//Pause Song
-function pauseSong(){
-    musicContainer.classList.add('play')
-    playBtn.querySelector('i.fas').classList.add('fa-play');
-    playBtn.querySelector('i.fas').classList.remove('fa-pause');
+// Pause song
+function pauseSong() {
+  musicContainer.classList.remove('play');
+  playBtn.querySelector('i.fas').classList.add('fa-play');
+  playBtn.querySelector('i.fas').classList.remove('fa-pause');
 
-    audio.pause();
+  audio.pause();
+}
+
+// Previous song
+function prevSong() {
+  songIndex--;
+
+  if (songIndex < 0) {
+    songIndex = songs.length - 1;
+  }
+
+  loadSong(songs[songIndex]);
+
+  playSong();
 }
 
 // Next song
@@ -56,20 +71,20 @@ function nextSong() {
   playSong();
 }
 
-//Update Progress Bar
-function updateProgess(e){
-    const { duration, currentTime } = e.srcElement;
-    const progressPercent = (currentTime/duration)*100;
-    progress.style.width = `${progressPercent}%`;
+// Update progress bar
+function updateProgress(e) {
+  const { duration, currentTime } = e.srcElement;
+  const progressPercent = (currentTime / duration) * 100;
+  progress.style.width = `${progressPercent}%`;
 }
 
-//Set progress Bar
-function setProgress(e){
-    const width = this.clientWidth;
-    const clickX = e.offsetX;
-    const duration = audio.duration;
-  
-    audio.currentTime = (clickX / width) * duration;
+// Set progress bar
+function setProgress(e) {
+  const width = this.clientWidth;
+  const clickX = e.offsetX;
+  const duration = audio.duration;
+
+  audio.currentTime = (clickX / width) * duration;
 }
 
 //get duration & currentTime for Time of song
